@@ -12,11 +12,11 @@ func FanIn[T any](in ...<-chan T) <-chan T {
 		}()
 	}
 	go func() {
+		defer close(closed)
+		defer close(c)
 		for i := 0; i < len(in); i++ {
 			<-closed
 		}
-		close(c)
-		close(closed)
 	}()
 	return c
 }
